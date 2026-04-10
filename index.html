@@ -1,13 +1,175 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <title>StreetJams</title>
+<html lang="en"> <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>StreetJams | Discover and Share Local Street Items</title>
+  
+  <meta name="description" content="Join StreetJams to discover, share, and track amazing street items and urban culture around you. Download the app today!">
+  
+  <meta name="keywords" content="StreetJams, street items, urban discovery, local sharing app">
+
+  <link rel="icon" href="assets/favicon.png" type="image/x-icon">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+  <meta property="og:title" content="StreetJams | Discover Local Street Items">
+  <meta property="og:description" content="Discover and share amazing street items around you. Download StreetJams now.">
+  <meta property="og:type" content="website">
+  <style>
+    /* 基础重置与变量 */
+    :root {
+      --primary-color: #2563eb;
+      --text-main: #1f2937;
+      --text-muted: #6b7280;
+      --bg-color: #f9fafb;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh; /* 确保 footer 始终在底部 */
+      line-height: 1.6;
+    }
+
+    /* 顶部导航 */
+    header {
+      padding: 20px 40px;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--primary-color);
+    }
+
+    /* 核心内容区 */
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 0 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      letter-spacing: -1px;
+    }
+
+    p.subtitle {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      max-width: 600px;
+    }
+
+    /* 下载按钮占位 */
+    .cta-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #1d4ed8;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: white;
+      color: var(--text-main);
+      border: 1px solid #d1d5db;
+    }
+
+    .btn-secondary:hover {
+      background-color: #f3f4f6;
+      transform: translateY(-2px);
+    }
+
+    /* 底部链接区 */
+    footer {
+      padding: 30px 20px;
+      text-align: center;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: none;
+      margin: 0 15px;
+      font-size: 0.875rem;
+      transition: color 0.2s ease;
+    }
+
+    footer a:hover {
+      color: var(--primary-color);
+    }
+
+    /* 响应式调整 (针对手机屏幕) */
+    @media (max-width: 600px) {
+      h1 { font-size: 2.5rem; }
+      p.subtitle { font-size: 1.1rem; }
+      header { padding: 20px; justify-content: center; }
+    }
+  </style>
 </head>
 <body>
-  <h1>StreetJams</h1>
-  <p>Discover and share street items around you.</p>
 
-  <a href="/privacy">Privacy Policy</a><br/>
-  <a href="/terms">Terms & Conditions</a>
+  <header>
+    <div class="logo">StreetJams</div>
+  </header>
+
+  <main>
+    <h1>Discover the streets.<br>Share the culture.</h1>
+    <p class="subtitle">Join StreetJams to uncover, share, and track amazing street items around you.</p>
+    
+    <div class="cta-group">
+      <!-- <a href="#ios" class="btn btn-primary">Download for iOS</a> -->
+      <a href="#android" class="btn btn-primary">Get it on Android</a>
+    </div>
+  </main>
+
+  <footer>
+    <a href="/privacy">Privacy Policy</a>
+    <a href="/terms">Terms & Conditions</a>
+    <p style="margin-top: 10px; font-size: 0.75rem; color: #9ca3af;">&copy; 2026 StreetJams. All rights reserved.</p>
+  </footer>
+
 </body>
 </html>
