@@ -1,24 +1,24 @@
 <!DOCTYPE html>
 <html lang="en"> <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   
   <title>StreetJams | Discover and Share Local Street Items</title>
   
-  <meta name="description" content="Join StreetJams to discover, share, and track amazing street items and urban culture around you. Download the app today!">
+  <meta name="description" content="Discover and share street finds with StreetJams. Join the stooping community, reduce urban waste, and help give unwanted items a second life.">
   
-  <meta name="keywords" content="StreetJams, street items, urban discovery, local sharing app">
+  <meta name="keywords" content="stooping, street, free stuff, street bounty, urban waste, sustainability, streetjams">
 
   <link rel="icon" href="assets/favicon.png" type="image/x-icon">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
   <meta property="og:title" content="StreetJams | Discover Local Street Items">
-  <meta property="og:description" content="Discover and share amazing street items around you. Download StreetJams now.">
+  <meta property="og:description" content="Discover and share free street finds. Join the stooping community and help reduce urban waste with StreetJams.">
   <meta property="og:type" content="website">
   <style>
-    /* 基础重置与变量 */
+    
     :root {
-      --primary-color: #2563eb;
+      --primary-color: hsl(0, 0%, 2%);
       --text-main: #1f2937;
       --text-muted: #6b7280;
       --bg-color: #f9fafb;
@@ -36,11 +36,10 @@
       color: var(--text-main);
       display: flex;
       flex-direction: column;
-      min-height: 100vh; /* 确保 footer 始终在底部 */
+      min-height: 100vh;
       line-height: 1.6;
     }
 
-    /* 顶部导航 */
     header {
       padding: 20px 40px;
       display: flex;
@@ -55,7 +54,6 @@
       color: var(--primary-color);
     }
 
-    /* 核心内容区 */
     main {
       flex: 1;
       display: flex;
@@ -83,7 +81,6 @@
       max-width: 600px;
     }
 
-    /* 下载按钮占位 */
     .cta-group {
       display: flex;
       gap: 15px;
@@ -93,23 +90,15 @@
 
     .btn {
       display: inline-block;
-      padding: 14px 28px;
-      font-size: 1rem;
-      font-weight: 600;
-      text-decoration: none;
+      padding: 0;
       border-radius: 8px;
-      transition: all 0.2s ease;
+    }
+    .store-badge {
+      height: 60px;
+      width: auto;
+      display: block;
     }
 
-    .btn-primary {
-      background-color: var(--primary-color);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background-color: #1d4ed8;
-      transform: translateY(-2px);
-    }
 
     .btn-secondary {
       background-color: white;
@@ -122,7 +111,6 @@
       transform: translateY(-2px);
     }
 
-    /* 底部链接区 */
     footer {
       padding: 30px 20px;
       text-align: center;
@@ -141,12 +129,93 @@
       color: var(--primary-color);
     }
 
-    /* 响应式调整 (针对手机屏幕) */
-    @media (max-width: 600px) {
-      h1 { font-size: 2.5rem; }
-      p.subtitle { font-size: 1.1rem; }
-      header { padding: 20px; justify-content: center; }
+    .hero-mobile {
+      display: none;
     }
+    .desktop-copy {
+      display: block;
+    }
+
+
+    @media (max-width: 600px) {
+
+  header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 20;
+    padding: max(24px, env(safe-area-inset-top)) 24px 24px;
+  }
+
+  .logo {
+    color: white;
+  }
+
+  main {
+    padding: 0;
+    width: 100%;
+    max-width: none;
+  }
+
+  .desktop-copy {
+    display: none;
+  }
+
+  .hero-mobile {
+    display: block;
+    position: relative;
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .hero-mobile img {
+    width: 100%;
+    height: 60vh;
+    min-height: 420px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 24px;
+    background: linear-gradient(
+      to top,
+      rgba(0,0,0,0.65),
+      rgba(0,0,0,0.1)
+    );
+  }
+
+  .hero-overlay h1 {
+    color: white;
+    font-size: 2.2rem;
+    margin-bottom: 12px;
+    text-align: left;
+  }
+
+  .hero-overlay .subtitle {
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 0;
+    text-align: left;
+  }
+
+  .cta-group {
+    width: 100%;
+    padding: 0 20px 20px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .store-badge {
+    height: 56px;
+  }
+}
   </style>
 </head>
 <body>
@@ -156,12 +225,41 @@
   </header>
 
   <main>
-    <h1>Discover the streets.<br>Share the culture.</h1>
-    <p class="subtitle">Join StreetJams to uncover, share, and track amazing street items around you.</p>
+    <div class="hero-mobile">
+      <img
+      src="/assets/room.jpg"
+      alt="StreetJams Stooping"
+      />
+      <div class="hero-overlay">
+        <h1>StreetJams.<br>My room is the city.</h1>
+        <p class="subtitle">
+          Spot. Snap. Stoop. Give great items a second life while reducing urban waste.
+        </p>
+      </div>
+    </div>
+    <div class="desktop-copy">
+      <h1>StreetJams.<br>My room is the city.</h1>
+    <p class="subtitle">
+    Spot. Snap. Stoop. Give great items a second life while reducing urban waste.
+    </p>
+    </div>
     
     <div class="cta-group">
       <!-- <a href="#ios" class="btn btn-primary">Download for iOS</a> -->
-      <a href="#android" class="btn btn-primary">Get it on Android</a>
+      <a href="APP_STORE_URL" class="btn">
+        <img
+        src="/assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"
+        alt="Download on the App Store"
+        class="store-badge"
+        >
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.streetjams.app" class="btn">
+        <img
+        src="/assets/GetItOnGooglePlay_Badge_Web_color_English.svg"
+        alt="Download on the Google Play Store"
+        class="store-badge"
+        >
+      </a>
     </div>
   </main>
 
