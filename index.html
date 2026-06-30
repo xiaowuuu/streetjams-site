@@ -1,274 +1,270 @@
 <!DOCTYPE html>
-<html lang="en"> <head>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  
-  <title>StreetJams | Discover and Share Local Street Items</title>
-  
-  <meta name="description" content="Discover and share street finds with StreetJams. Join the stooping community, reduce urban waste, and help give unwanted items a second life.">
-  
-  <meta name="keywords" content="stooping, street, free stuff, street bounty, urban waste, sustainability, streetjams">
+
+  <title>StreetJams | Discover and Share Local Finds</title>
+
+  <meta name="description" content="Discover and share free local finds with StreetJams. Join the stooping community, reduce urban waste, and help give unwanted items a second life.">
+  <meta name="keywords" content="stooping, street, curb finds, free stuff, street bounty, urban waste, sustainability, streetjams">
+  <meta property="og:title" content="StreetJams | Discover Local Finds">
+  <meta property="og:description" content="Discover and share free local finds with StreetJams. Join the stooping community, reduce urban waste, and help give unwanted items a second life.">
 
   <link rel="icon" href="assets/favicon.png" type="image/x-icon">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
-  <meta property="og:title" content="StreetJams | Discover Local Street Items">
-  <meta property="og:description" content="Discover and share free street finds. Join the stooping community and help reduce urban waste with StreetJams.">
   <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Work+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
-    
     :root {
-      --primary-color: hsl(0, 0%, 2%);
-      --text-main: #1f2937;
-      --text-muted: #6b7280;
-      --bg-color: #f9fafb;
+      --ink: #140E08;
+      --brick: #D9612C;
+      --brass: #E8B84B;
+      --cream: #F2ECE0;
+      --cream-dim: rgba(242,236,224,0.72);
+      --line: rgba(242,236,224,0.22);
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
+      font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--cream);
+      background: var(--ink);
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      min-height: 100dvh;
+      width: 100%;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
-      line-height: 1.6;
+      overflow: hidden;
     }
 
-    header {
-      padding: 20px 40px;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
+    /* Mobile: portrait room photo */
+    .bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(180deg, rgba(20,14,8,0.62) 0%, rgba(20,14,8,0.18) 18%, rgba(20,14,8,0.12) 45%, rgba(20,14,8,0.55) 78%, rgba(15,10,6,0.92) 100%),
+        url('assets/room.jpg');
+      background-size: cover;
+      background-position: center 30%;
+      background-repeat: no-repeat;
     }
 
-    .logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: var(--primary-color);
+    /* Desktop / laptop: wider hero photo */
+    @media (min-width: 768px) {
+      .bg {
+        background-image:
+          linear-gradient(180deg, rgba(20,14,8,0.62) 0%, rgba(20,14,8,0.18) 18%, rgba(20,14,8,0.12) 45%, rgba(20,14,8,0.55) 78%, rgba(15,10,6,0.92) 100%),
+          url('assets/background-image.jpg');
+        background-position: center 35%;
+      }
     }
 
-    main {
+    .content {
+      position: relative;
+      z-index: 2;
       flex: 1;
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: space-between;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 32px 24px 24px;
+    }
+
+    /* ===== TOP: logo ===== */
+    .top {
+      display: flex;
+      flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 0 20px;
-      max-width: 800px;
-      margin: 0 auto;
+      padding-top: 8px;
+    }
+    .logo img {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      margin-bottom: -3px;
+}
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--brass);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: "—";
+      color: var(--cream-dim);
+      margin: 0 8px;
     }
 
-    h1 {
-      font-size: 3.5rem;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 20px;
-      letter-spacing: -1px;
+    .logo {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(20px, 2vw, 24px);
+      letter-spacing: -0.01em;
+      line-height: 1;
+      text-transform: uppercase;
+      color: #fff;
+    }
+    
+
+    /* ===== MIDDLE: slogan ===== */
+    .middle {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px 8px;
     }
 
-    p.subtitle {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-      max-width: 600px;
+    .slogan {
+      font-family: 'Archivo Black', sans-serif;
+      font-size: clamp(28px, 9vw, 64px);
+      text-transform: uppercase;
+      line-height: 1.02;
+      letter-spacing: -0.01em;
+      max-width: 780px;
+    }
+    .slogan .line2 { color: var(--brass); }
+
+    .subtitle {
+      font-family: 'Work Sans', sans-serif;
+      font-weight: 500;
+      font-size: clamp(13px, 2.4vw, 16px);
+      letter-spacing: 0.02em;
+      color: var(--cream-dim);
+      margin-top: 18px;
+      max-width: 460px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
+    /* ===== CTA / badges ===== */
     .cta-group {
       display: flex;
-      gap: 15px;
+      gap: 14px;
       justify-content: center;
       flex-wrap: wrap;
+      margin-bottom: 18px;
     }
 
-    .btn {
-      display: inline-block;
-      padding: 0;
-      border-radius: 8px;
-    }
+    .btn { display: inline-block; border-radius: 10px; }
+
     .store-badge {
-      height: 60px;
+      height: 56px;
       width: auto;
       display: block;
+      border-radius: 10px;
+      filter: drop-shadow(0 2px 10px rgba(0,0,0,0.35));
+      transition: transform .15s ease, filter .15s ease;
     }
+    .btn:hover .store-badge { transform: translateY(-2px); }
+    .btn:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 10px; }
 
-
-    .btn-secondary {
-      background-color: white;
-      color: var(--text-main);
-      border: 1px solid #d1d5db;
-    }
-
-    .btn-secondary:hover {
-      background-color: #f3f4f6;
-      transform: translateY(-2px);
-    }
-
+    /* ===== FOOTER ===== */
     footer {
-      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
       text-align: center;
-      border-top: 1px solid #e5e7eb;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
     }
 
-    footer a {
-      color: var(--text-muted);
+    .foot-links { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; }
+    .foot-links a {
+      color: var(--cream-dim);
+      font-size: 12px;
       text-decoration: none;
-      margin: 0 15px;
-      font-size: 0.875rem;
-      transition: color 0.2s ease;
+      letter-spacing: 0.02em;
+    }
+    .foot-links a:hover { color: var(--cream); text-decoration: underline; }
+
+    .copyright { font-size: 11px; color: rgba(242,236,224,0.45); }
+
+    @media (max-width: 420px) {
+      .store-badge { height: 50px; }
+      .content { padding: 24px 16px 18px; }
     }
 
-    footer a:hover {
-      color: var(--primary-color);
+    @media (prefers-reduced-motion: reduce) {
+      .btn { transition: none; }
     }
-
-    .hero-mobile {
-      display: none;
-    }
-    .desktop-copy {
-      display: block;
-    }
-
-
-    @media (max-width: 600px) {
-
-  header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 20;
-    padding: max(24px, env(safe-area-inset-top)) 24px 24px;
-  }
-
-  .logo {
-    color: white;
-  }
-
-  main {
-    padding: 0;
-    width: 100%;
-    max-width: none;
-  }
-
-  .desktop-copy {
-    display: none;
-  }
-
-  .hero-mobile {
-    display: block;
-    position: relative;
-    width: 100%;
-    margin-bottom: 24px;
-  }
-
-  .hero-mobile img {
-    width: 100%;
-    height: 60vh;
-    min-height: 420px;
-    object-fit: cover;
-    display: block;
-  }
-
-  .hero-overlay {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 24px;
-    background: linear-gradient(
-      to top,
-      rgba(0,0,0,0.65),
-      rgba(0,0,0,0.1)
-    );
-  }
-
-  .hero-overlay h1 {
-    color: white;
-    font-size: 2.2rem;
-    margin-bottom: 12px;
-    text-align: left;
-  }
-
-  .hero-overlay .subtitle {
-    color: white;
-    font-size: 1rem;
-    margin-bottom: 0;
-    text-align: left;
-  }
-
-  .cta-group {
-    width: 100%;
-    padding: 0 20px 20px;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .store-badge {
-    height: 56px;
-  }
-}
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">StreetJams</div>
-  </header>
+  <div class="hero">
+    <div class="bg"></div>
 
-  <main>
-    <div class="hero-mobile">
-      <img
-      src="/assets/room.jpg"
-      alt="StreetJams Stooping"
-      />
-      <div class="hero-overlay">
-        <h1>StreetJams.<br>My room is the city.</h1>
-        <p class="subtitle">
-          Spot. Snap. Stoop. Give great items a second life while reducing urban waste.
-        </p>
+    <div class="content">
+
+      <!-- TOP: logo -->
+      <div class="top">
+        <div class="eyebrow">Est. on the stoop</div>
+        <div class="logo">
+          <img src="assets/Logo-white.png" alt="StreetJams logo">
+          <span>StreetJams</span>
+        </div>
       </div>
-    </div>
-    <div class="desktop-copy">
-      <h1>StreetJams.<br>My room is the city.</h1>
-    <p class="subtitle">
-    Spot. Snap. Stoop. Give great items a second life while reducing urban waste.
-    </p>
-    </div>
-    
-    <div class="cta-group">
-      <!-- <a href="#ios" class="btn btn-primary">Download for iOS</a> -->
-      <a href="APP_STORE_URL" class="btn">
-        <img
-        src="/assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"
-        alt="Download on the App Store"
-        class="store-badge"
-        >
-      </a>
-      <a href="https://play.google.com/store/apps/details?id=com.streetjams.app" class="btn">
-        <img
-        src="/assets/GetItOnGooglePlay_Badge_Web_color_English.svg"
-        alt="Download on the Google Play Store"
-        class="store-badge"
-        >
-      </a>
-    </div>
-  </main>
 
-  <footer>
-    <a href="/privacy">Privacy Policy</a>
-    <a href="/terms">Terms & Conditions</a>
-    <a href="/support">Support</a>
-    <p style="margin-top: 10px; font-size: 0.75rem; color: #9ca3af;">&copy; 2026 StreetJams. All rights reserved.</p>
-  </footer>
+      <!-- MIDDLE: slogan -->
+      <div class="middle">
+        <div>
+          <div class="slogan">my room<br><span class="line2">is the city</span></div>
+          <p class="subtitle">Spot. Snap. Stoop. Give great items a second life while reducing urban waste.</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="cta-group">
+        <a href="https://apps.apple.com/gb/app/streetjams/id6777686015" class="btn" alt="app store url">
+          <img
+            src="/assets/Download_on_the_App_Store_Badge_US-UK_RGB_blk_092917.svg"
+            alt="Download on the App Store"
+            class="store-badge"
+          >
+        </a>
+        <a href="https://play.google.com/store/apps/details?id=com.streetjams.app" class="btn" alt="play store url">
+          <img
+            src="/assets/GetItOnGooglePlay_Badge_Web_color_English.svg"
+            alt="Download on the Google Play Store"
+            class="store-badge"
+          >
+        </a>
+      </div>
+
+      <!-- FOOTER -->
+      <footer>
+        <div class="foot-links">
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms &amp; Conditions</a>
+          <a href="/support">Support</a>
+        </div>
+        <div class="copyright">© 2026 StreetJams. All rights reserved.</div>
+      </footer>
+
+    </div>
+  </div>
 
 </body>
 </html>
