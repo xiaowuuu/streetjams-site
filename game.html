@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edinburgh Street Treasure Hunt</title>
+<style>
+  :root{
+    --ink:#17243d;
+    --blue:#194a91;
+    --blue2:#2d6fc2;
+    --cream:#fff7df;
+    --gold:#f4bd4f;
+    --green:#67c67c;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(circle at 15% 15%, rgba(255,255,255,.7), transparent 28%),
+      linear-gradient(#d8e9f7,#f5ead4);
+    color:var(--ink);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    image-rendering:auto;
+  }
+  .game{
+    width:min(1220px, 96vw);
+    margin:18px auto 28px;
+  }
+  .titlebar{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    margin-bottom:10px;
+  }
+  .title{
+    margin:0;
+    font-size:clamp(17px,2.5vw,28px);
+    letter-spacing:-1px;
+    color:#123b76;
+    text-shadow:2px 2px 0 #fff;
+  }
+  .subtitle{
+    font-size:11px; color:#52637c; text-align:right; line-height:1.4;
+  }
+  .map-wrap{
+    position:relative;
+    overflow:hidden;
+    border:7px solid #153b71;
+    border-radius:18px;
+    background:#0b4e8d;
+    box-shadow:0 8px 0 #0e2b51, 0 18px 35px rgba(24,44,68,.25);
+  }
+  .map{
+    position:relative;
+    width:100%;
+    aspect-ratio:1735/906;
+    background:url("assets/game/map.png") center/100% 100% no-repeat;
+    overflow:hidden;
+    user-select:none;
+  }
+  .map::after{
+    content:"";
+    position:absolute; inset:0; pointer-events:none;
+    box-shadow:inset 0 0 0 3px rgba(255,255,255,.25);
+  }
+
+  .chest{
+    position:absolute;
+    width:clamp(42px,5.4vw,72px);
+    aspect-ratio:1/0.78;
+    transform:translate(-50%,-65%);
+    z-index:6;
+    border:0;
+    background:transparent;
+    padding:0;
+    cursor:pointer;
+    filter:drop-shadow(0 5px 2px rgba(0,0,0,.35));
+    transition:transform .12s ease, filter .12s ease;
+  }
+  .chest:hover:not(:disabled){ transform:translate(-50%,-70%) scale(1.08); }
+  .chest:disabled{cursor:default}
+  .chest img{width:100%;height:100%;object-fit:contain;image-rendering:pixelated}
+  .chest .pin{
+    position:absolute;
+    left:50%; top:100%;
+    transform:translateX(-50%);
+    white-space:nowrap;
+    font-size:clamp(7px,.8vw,11px);
+    font-weight:900;
+    color:#fff;
+    background:#173c72;
+    border:2px solid #fff;
+    border-radius:7px;
+    padding:3px 6px;
+    box-shadow:2px 3px 0 rgba(0,0,0,.22);
+  }
+  .chest .done{
+    display:none;
+    position:absolute;
+    right:-4px; top:-10px;
+    background:#49b86b; color:#fff;
+    width:20px;height:20px;border-radius:50%;
+    border:2px solid #fff; font-size:12px; line-height:16px;
+  }
+  .chest.found .done{display:block}
+  .chest.found .pin{background:#5c6d7d}
+  .chest.shake{animation:shake .45s steps(2,end)}
+  @keyframes shake{
+    0%,100%{transform:translate(-50%,-65%)}
+    25%{transform:translate(calc(-50% - 4px),-65%) rotate(-4deg)}
+    50%{transform:translate(calc(-50% + 4px),-65%) rotate(4deg)}
+    75%{transform:translate(calc(-50% - 2px),-65%) rotate(-2deg)}
+  }
+
+  .player{
+    position:absolute;
+    width:clamp(45px,6vw,76px);
+    height:clamp(68px,9vw,105px);
+    transform:translate(-50%,-88%);
+    z-index:7;
+    pointer-events:none;
+    transition:left var(--move-time, .9s) linear, top var(--move-time, .9s) linear;
+  }
+  .player img{
+    width:100%; height:100%;
+    object-fit:contain;
+    image-rendering:pixelated;
+  }
+  .player.walking img{animation:bob .22s steps(2,end) infinite}
+  @keyframes bob{50%{transform:translateY(-2px)}}
+  .player.shadow{
+    filter:drop-shadow(0 5px 1px rgba(0,0,0,.25));
+  }
+
+  .map-hint{
+    position:absolute; left:14px; top:14px; z-index:10;
+    max-width:280px;
+    padding:7px 10px;
+    border-radius:9px;
+    background:rgba(255,248,220,.92);
+    border:3px solid #1b477f;
+    box-shadow:3px 4px 0 rgba(0,0,0,.2);
+    font-size:10px; font-weight:900;
+    color:#173a6c;
+  }
+
+  .status{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:160px 1fr auto;
+    min-height:145px;
+    background:#fff9e9;
+    border:5px solid #173d74;
+    border-radius:16px;
+    box-shadow:0 7px 0 #102b50;
+    overflow:hidden;
+  }
+  .portrait{
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(#dcecff,#c4e0ff);
+    border-right:4px solid #173d74;
+    position:relative;
+  }
+  .portrait::before{
+    content:"PLAYER";
+    position:absolute; top:7px; left:9px;
+    font-size:9px; font-weight:900; color:#173d74;
+  }
+  .portrait img{
+    width:100px;height:105px;object-fit:contain;image-rendering:pixelated;
+    margin-top:12px;
+  }
+  .info{
+    padding:17px 20px;
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .location{
+    font-size:10px; font-weight:900; color:#5b6b7e;
+    margin-bottom:5px; text-transform:uppercase;
+  }
+  .item-name{
+    margin:0 0 7px;
+    font-size:clamp(16px,2vw,24px);
+    color:#143e78;
+    text-transform:uppercase;
+  }
+  .description{
+    margin:0;
+    font-family:inherit;
+    font-size:12px;
+    line-height:1.55;
+    color:#3e4c5d;
+    max-width:720px;
+  }
+  .item-preview{
+    min-width:150px;
+    display:flex; align-items:center; justify-content:center;
+    padding:12px;
+    border-left:3px dashed #c4b994;
+    background:#fff4d4;
+  }
+  .item-preview img{
+    max-width:140px; max-height:115px;
+    object-fit:contain; image-rendering:pixelated;
+  }
+  .controls{
+    display:flex; gap:8px; align-items:center; justify-content:space-between;
+    margin-top:12px;
+  }
+  .progress{
+    font-size:10px; font-weight:900; color:#51657d;
+  }
+  button.reset{
+    border:3px solid #173d74;
+    background:#f8c958;
+    color:#173d74;
+    font:900 11px inherit;
+    border-radius:9px;
+    padding:7px 10px;
+    cursor:pointer;
+    box-shadow:0 3px 0 #173d74;
+  }
+  button.reset:active{transform:translateY(2px);box-shadow:0 1px 0 #173d74}
+
+  @media (max-width:700px){
+    .game{width:100%; margin:0 auto 20px}
+    .titlebar{padding:10px 12px 0}
+    .subtitle{display:none}
+    .map-wrap{border-width:4px;border-radius:0;box-shadow:0 5px 0 #0e2b51}
+    .map-hint{font-size:8px;max-width:210px}
+    .status{
+      grid-template-columns:105px 1fr;
+      border-radius:0 0 12px 12px;
+      border-width:4px;
+      min-height:125px;
+      box-shadow:0 5px 0 #102b50;
+    }
+    .portrait{border-right:3px solid #173d74}
+    .portrait img{width:80px;height:90px}
+    .info{padding:11px}
+    .item-name{font-size:14px}
+    .description{font-size:10px}
+    .item-preview{display:none}
+    .controls{padding:0 10px}
+  }
+</style>
+</head>
+<body>
+<div class="game">
+  <div class="titlebar">
+    <h1 class="title">EDINBURGH STREET TREASURE HUNT</h1>
+    <div class="subtitle">A tiny pixel adventure about rescuing useful things<br>from the streets of Edinburgh.</div>
+  </div>
+
+  <div class="map-wrap">
+    <div class="map" id="map">
+      <div class="map-hint">✨ Find all 5 chests. Click a chest to walk over and open it.</div>
+
+      <button class="chest" data-index="0" style="left:59%;top:31%" aria-label="Leith Walk treasure chest">
+        <img src="assets/game/chest-closed.png" alt="">
+        <span class="pin">LEITH WALK</span><span class="done">✓</span>
+      </button>
+      <button class="chest" data-index="1" style="left:48%;top:57%" aria-label="Marchmont treasure chest">
+        <img src="assets/game/chest-closed.png" alt="">
+        <span class="pin">MARCHMONT</span><span class="done">✓</span>
+      </button>
+      <button class="chest" data-index="2" style="left:54%;top:64%" aria-label="Newington treasure chest">
+        <img src="assets/game/chest-closed.png" alt="">
+        <span class="pin">NEWINGTON</span><span class="done">✓</span>
+      </button>
+      <button class="chest" data-index="3" style="left:43%;top:70%" aria-label="Morningside treasure chest">
+        <img src="assets/game/chest-closed.png" alt="">
+        <span class="pin">MORNINGSIDE</span><span class="done">✓</span>
+      </button>
+      <button class="chest" data-index="4" style="left:76%;top:37%" aria-label="Portobello treasure chest">
+        <img src="assets/game/chest-closed.png" alt="">
+        <span class="pin">PORTOBELLO</span><span class="done">✓</span>
+      </button>
+
+      <div class="player shadow" id="player" style="left:50%;top:52%">
+        <!-- 修正点 1: id 从 "assets/game/playerSprite" 修正为 "playerSprite" -->
+        <img id="playerSprite" src="assets/game/idle.png" alt="Player character">
+      </div>
+    </div>
+  </div>
+
+  <div class="status">
+    <div class="portrait"><img id="portrait" src="assets/game/idle.png" alt="Current player expression"></div>
+    <div class="info">
+      <div class="location" id="location">Edinburgh map</div>
+      <h2 class="item-name" id="itemName">Choose a treasure chest</h2>
+      <p class="description" id="description">Click any chest on the map. Your character will walk over, open it, and reveal what was found.</p>
+    </div>
+    <div class="item-preview"><img id="itemPreview" src="assets/game/chest-closed.png" alt="Treasure preview"></div>
+  </div>
+
+  <div class="controls">
+    <div class="progress" id="progress">TREASURES FOUND: 0 / 5</div>
+    <button class="reset" id="reset">RESET ADVENTURE</button>
+  </div>
+</div>
+
+<script>
+const chests = [
+  {
+    location:"Leith Walk",
+    item:"Wonky table",
+    image:"assets/game/wonky-table.png",
+    description:"A little wonky, but absolutely salvageable. A few screws and a bit of care could give this table a second life.",
+    target:[55,34],
+    expression:"speechless"
+  },
+  {
+    location:"Marchmont",
+    item:"Wonky table",
+    image:"assets/game/wonky-table.png",
+    description:"Another rescued table! It is wobbly, imperfect and full of character — perfect for a small repair project.",
+    target:[51,59],
+    expression:"embarassing"
+  },
+  {
+    location:"Newington",
+    item:"Perfect wooden rack",
+    image:"assets/game/rack.png",
+    description:"A beautiful wooden rack in great condition. No major repair needed — just give it a new home.",
+    target:[57,66],
+    expression:"happy"
+  },
+  {
+    location:"Morningside",
+    item:"Second-hand books",
+    image:"assets/game/books.png",
+    description:"A whole box of second-hand books, waiting for another reader. One person's clutter is another person's treasure.",
+    target:[46,72],
+    expression:"surprised"
+  },
+  {
+    location:"Portobello",
+    item:"Antique furniture",
+    image:"assets/game/antique-furniture.png",
+    description:"A charming old piece of furniture with plenty of life left in it. It needs a little repair, but it is worth saving.",
+    target:[72,41],
+    expression:"happy"
+  }
+];
+
+const player = document.getElementById("player");
+const playerSprite = document.getElementById("playerSprite");
+const portrait = document.getElementById("portrait");
+const itemName = document.getElementById("itemName");
+const description = document.getElementById("description");
+const locationEl = document.getElementById("location");
+const itemPreview = document.getElementById("itemPreview");
+const progress = document.getElementById("progress");
+const chestEls = [...document.querySelectorAll(".chest")];
+const resetBtn = document.getElementById("reset");
+
+let playerPos = [50,52];
+let moving = false;
+let found = new Set();
+let frameTimer = null;
+
+function setSprite(src){
+  playerSprite.src = src;
+}
+function setPortrait(src){
+  portrait.src = src;
+}
+function directionFor(target){
+  const dx = target[0] - playerPos[0];
+  const dy = target[1] - playerPos[1];
+  if(Math.abs(dx) > Math.abs(dy)) return dx < 0 ? "left" : "right";
+  return dy < 0 ? "up" : "down";
+}
+function animateWalk(dir){
+  // 修正点 2: 补全 assets/game/ 前缀
+  const frames = [1,2,3].map(n => `assets/game/walk-${dir}-${n}.png`);
+  let i=0;
+  clearInterval(frameTimer);
+  setSprite(frames[0]);
+  frameTimer=setInterval(()=>{ i=(i+1)%frames.length; setSprite(frames[i]); },120);
+}
+function stopWalk(){
+  clearInterval(frameTimer);
+  frameTimer=null;
+  setSprite("assets/game/idle.png");
+}
+function updateProgress(){
+  progress.textContent=`TREASURES FOUND: ${found.size} / ${chests.length}`;
+}
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function openChest(index){
+  if(moving) return;
+  const chest=chests[index];
+  const el=chestEls[index];
+  if(found.has(index)){
+    showFound(index);
+    return;
+  }
+
+  moving=true;
+  chestEls.forEach(c=>c.disabled=true);
+  locationEl.textContent=`WALKING TO ${chest.location.toUpperCase()}...`;
+  itemName.textContent="On the way...";
+  description.textContent="Step by step through Edinburgh — your character is heading towards the treasure.";
+  itemPreview.src="assets/game/chest-closed.png";
+  setPortrait("assets/game/idle.png");
+
+  const dir=directionFor(chest.target);
+  animateWalk(dir);
+
+  const dx=Math.abs(chest.target[0]-playerPos[0]);
+  const dy=Math.abs(chest.target[1]-playerPos[1]);
+  const distance=Math.sqrt(dx*dx+dy*dy);
+  const duration=Math.max(.7, Math.min(1.9, distance*.045));
+  player.style.setProperty("--move-time", `${duration}s`);
+  player.style.left=chest.target[0]+"%";
+  player.style.top=chest.target[1]+"%";
+  await sleep(duration*1000+100);
+
+  playerPos=[...chest.target];
+  stopWalk();
+  setSprite("assets/game/surprised.png");
+  setPortrait("assets/game/surprised.png");
+  locationEl.textContent=chest.location.toUpperCase();
+  itemName.textContent="What's inside?";
+  description.textContent="The latch clicks...";
+  el.classList.add("shake");
+  await sleep(450);
+
+  // 修正点 3: 补全 assets/game/ 前缀
+  el.querySelector("img").src="assets/game/chest-opening.png";
+  await sleep(700);
+
+  found.add(index);
+  el.classList.add("found");
+  el.querySelector("img").src="assets/game/chest-opening.png";
+
+  // 修正点 4: 补全表情图片的前缀
+  setPortrait(`assets/game/${chest.expression}.png`);
+  itemPreview.src=chest.image;
+  locationEl.textContent=`FOUND IN ${chest.location.toUpperCase()}`;
+  itemName.textContent=chest.item;
+  description.textContent=chest.description;
+  updateProgress();
+
+  el.classList.remove("shake");
+  moving=false;
+  chestEls.forEach(c=>c.disabled=false);
+}
+
+function showFound(index){
+  const chest=chests[index];
+  setPortrait(`assets/game/${chest.expression}.png`);
+  itemPreview.src=chest.image;
+  locationEl.textContent=`FOUND IN ${chest.location.toUpperCase()}`;
+  itemName.textContent=chest.item;
+  description.textContent=chest.description;
+}
+
+chestEls.forEach((el,i)=>el.addEventListener("click",()=>openChest(i)));
+
+resetBtn.addEventListener("click",()=>{
+  if(moving) return;
+  found.clear();
+  chestEls.forEach((el)=>{
+    el.classList.remove("found","shake");
+    el.disabled=false;
+    el.querySelector("img").src="assets/game/chest-closed.png";
+  });
+  playerPos=[50,52];
+  player.style.transition="none";
+  player.style.left="50%";
+  player.style.top="52%";
+  requestAnimationFrame(()=>player.style.transition="left var(--move-time,.9s) linear, top var(--move-time,.9s) linear");
+  stopWalk();
+  setPortrait("assets/game/idle.png");
+  itemPreview.src="assets/game/chest-closed.png";
+  locationEl.textContent="Edinburgh map";
+  itemName.textContent="Choose a treasure chest";
+  description.textContent="Click any chest on the map. Your character will walk over, open it, and reveal what was found.";
+  updateProgress();
+});
+</script>
+</body>
+</html>
